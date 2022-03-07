@@ -1,7 +1,2 @@
-data/
-docs/
-references/
-reports/
-*.ipynb
 *.swp
 *.pyc
