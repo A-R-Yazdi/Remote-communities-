@@ -4,3 +4,4 @@ references/
 reports/
 *.ipynb
 *.swp
+*.pyc
