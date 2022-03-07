@@ -56,3 +56,17 @@ We suggest a high level structure to organize the images and the code.
 │   └── XGBoost-LingJun.ipynb
 └── README.md
 ```
+
+## Scaling
+
+To scale our notebook to include all the locations, we use `papermill` package. 
+
+Papermill allows us to parametrize and execute notebooks. We need to set the `dff` parameter to `df1, df2...`
+
+To do this, first add a `parameters` tag tothe cell in the notebook. In this case, we need to add the tag to `thedf` parameter. 
+- Menu bar -> View -> Cell toolbar -> Tags
+- Enter parameters in the textbook on the top of the cell
+- Click add tag
+
+Next we create `runner.ipynb` to run `XGBoost-LingJun_df1.ipynb` with different parameters. 
+
