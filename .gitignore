@@ -1,5 +1,5 @@
 *.swp
 *.pyc
 notebooks/mlruns
-artifacts/models/XGB.pickle
+artifacts/models
 notebooks/.ipynb_checkpoints
