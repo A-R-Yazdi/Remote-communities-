@@ -68,5 +68,4 @@ To do this, first add a `parameters` tag tothe cell in the notebook. In this cas
 - Enter parameters in the textbook on the top of the cell
 - Click add tag
 
-Next we create `runner.ipynb` to run `XGBoost-LingJun_df1.ipynb` with different parameters. 
-
+Next we create `runner.ipynb` to run `XGBoost-LingJun_df1.ipynb` with different parameters. Note that in `runner.ipynb` we are actually mass generating the model for different location data (there are 9 locations at the present). 
