@@ -3,3 +3,4 @@
 notebooks/mlruns
 artifacts/models
 notebooks/.ipynb_checkpoints
+data/*
