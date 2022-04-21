@@ -30,6 +30,11 @@ Set and activate your python environment with the following commands:
 conda env create -f environment.yml
 conda activate remote_com_env
 ```
+if the above two lines don't work, use 
+```
+conda creat -n <env_name> python
+pip install -r requirements.txt
+```
 ## **Running the notebooks**
 This is an example of how to run the notebooks:
 
