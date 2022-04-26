@@ -1,8 +1,11 @@
 *.swp
 *.pyc
-notebooks/mlruns
 artifacts/models
-notebooks/.ipynb_checkpoints
+artifacts/notebooks
+**/.ipynb_checkpoints
+.ipynb_checkpoints
+**/__pycache__
+**/**/__pycache__
 data/*
-packages/Preprocess/Preps.egg-info
-models/lgbm_forecaster.pickle
+**/**/*.egg-info
+models/*
