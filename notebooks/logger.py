@@ -2,7 +2,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-formatter = logging.Formatter('%(asctime)s - %(message)s')
+formatter = logging.Formatter("%(asctime)s - %(message)s")
 
 # create console handler and set level to info
 ch = logging.StreamHandler()
