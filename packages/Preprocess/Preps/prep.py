@@ -8,6 +8,7 @@ import numpy as np
 import seaborn as sns
 import statsmodels.api as sm
 
+
 class Preprocessing:
     def __init__(self):
         pass
@@ -48,7 +49,7 @@ class Preprocessing:
                 # use globals() to convert a string into var name so that we can use later
                 vars()[n] = self.load_n_sort(n, data_root=data_root)
                 list_of_df.append(vars()[n])
-        
+
         return list_of_df
 
     def show_missing_datetime(
@@ -88,17 +89,17 @@ class Preprocessing:
         return df.drop(["index"], axis=1)
 
     def show_shape(self, dfs: List[pd.DataFrame]):
-        li =  list(dfs)
+        li = list(dfs)
         shape = []
         for i in range(len(li)):
             if not isinstance(li[i], pd.DataFrame):
                 print("input needs to be a list of dataframes")
             shape.append(li[i].shape)
-        
+
         df = pd.DataFrame(
             shape,
             columns=["num_of_rows", "num_of_cols"],
-            index=['dataframe ' + str(i) for i in range(len(li))],
+            index=["dataframe " + str(i) for i in range(len(li))],
         )
         return df
 
@@ -172,33 +173,38 @@ class Preprocessing:
                 for row in range(anomaly_window, len(df)):
                     d_mean = df[col_name][row - anomaly_window : row].mean()
                     d_std = df[col_name][row - anomaly_window : row].std()
-                    low, high = d_mean - (num_of_std * d_std), d_mean + (
-                        num_of_std * d_std
+                    low, high = (
+                        d_mean - (num_of_std * d_std),
+                        d_mean + (num_of_std * d_std),
                     )
                     df[col_name][i] = d_mean
 
         return df
-    
+
     def plot_dfs(self, dfs: List[pd.DataFrame]):
         li = list(dfs)
-        
+
         for i in range(len(li)):
-            data = li[i][['datetime', 'kw_cap']].set_index('datetime')
-            fig = data.plot(figsize=(20, 4), title='df'+str(i+1)+" kw_cap")
+            data = li[i][["datetime", "kw_cap"]].set_index("datetime")
+            fig = data.plot(figsize=(20, 4), title="df" + str(i + 1) + " kw_cap")
             # fig.savefig(fig_root+'df'+str(i)+'.png')
             # print(fig)
 
-            temp_data = li[i][['datetime', 'Temp (°C)']].set_index('datetime')
-            fig = temp_data.plot(figsize=(20, 4), title='df'+str(i+1)+" temperature")
+            temp_data = li[i][["datetime", "Temp (°C)"]].set_index("datetime")
+            fig = temp_data.plot(
+                figsize=(20, 4), title="df" + str(i + 1) + " temperature"
+            )
             # use a print() statement will print: 'AxesSubplot' object ......(something something)
             # print(fig)
             plt.show()
 
-    def scale_series(self, 
-                    dfs: List[pd.DataFrame],
-                    cols=[str], 
-                    cols_scaler_range=[tuple], 
-                    DEBUG_MODE=False):
+    def scale_series(
+        self,
+        dfs: List[pd.DataFrame],
+        cols=[str],
+        cols_scaler_range=[tuple],
+        DEBUG_MODE=False,
+    ):
         """
         cols are a list strings, they are the dataframe column names; 
         cols_scaler_range are a list of tuples, they are the range we want to scale the cols to.  
@@ -216,19 +222,27 @@ class Preprocessing:
                 data = data.reshape(len(data), 1)
                 data_scaler = MinMaxScaler(feature_range=cols_scaler_range[j])
                 data_scaler = data_scaler.fit(data)
-                data_normalized = pd.Series(data_scaler.transform(data).reshape(len(data)))
+                data_normalized = pd.Series(
+                    data_scaler.transform(data).reshape(len(data))
+                )
                 dic[cols[j]] = data_normalized
-                
+
                 if DEBUG_MODE:
-                    print(cols[j]+' Min: %f, Max: %f' % (data_scaler.data_min_, data_scaler.data_max_))
+                    print(
+                        cols[j]
+                        + " Min: %f, Max: %f"
+                        % (data_scaler.data_min_, data_scaler.data_max_)
+                    )
                     print()
-            
+
             # Concatenating the series side by side as depicted by axis=1
-            scaled_df.append(pd.concat(dic, axis = 1))
-        
+            scaled_df.append(pd.concat(dic, axis=1))
+
         return scaled_df
 
-    def standardize_series(self, dfs: List[pd.DataFrame], cols: [str], DEBUG_MODE=False):
+    def standardize_series(
+        self, dfs: List[pd.DataFrame], cols: [str], DEBUG_MODE=False
+    ):
         """
         cols are a list strings, they are the dataframe column names; 
         cols_scaler_range are a list of tuples, they are the range we want to scale the cols to.  
@@ -242,42 +256,45 @@ class Preprocessing:
             for j in range(len(cols)):
                 data = li[i][cols[j]].values
                 data = data.reshape(len(data), 1)
-                
+
                 scaler = StandardScaler()
                 scaler = scaler.fit(data)
-            
+
                 if DEBUG_MODE:
-                    print('Mean: %f, StandardDeviation: %f' % (scaler.mean_, sqrt(scaler.var_)))
+                    print(
+                        "Mean: %f, StandardDeviation: %f"
+                        % (scaler.mean_, sqrt(scaler.var_))
+                    )
 
                 normalized = scaler.transform(data)
                 data_normalized = pd.Series(scaler.transform(data).reshape(len(data)))
-                
+
                 dic[cols[j]] = data_normalized
-            # Concatenating the series side by side as depicted by axis=1  
-            stdard_df.append(pd.concat(dic, axis = 1))
-            
+            # Concatenating the series side by side as depicted by axis=1
+            stdard_df.append(pd.concat(dic, axis=1))
+
             print()
-        
+
         return stdard_df
-    
+
     def plot_QQ(self, df: pd.DataFrame, col: str):
         r_range = np.linspace(min(df[col].dropna()), max(df[col].dropna()), num=1000)
         mu = df[col].dropna().mean()
         sigma = df[col].dropna().std()
         norm_pdf = scs.norm.pdf(r_range, loc=mu, scale=sigma)
 
-        #Plot the histogram and the Q-Q plot
+        # Plot the histogram and the Q-Q plot
         fig, ax = plt.subplots(1, 2, figsize=(16, 5))
 
         # distplot() deprecated, use displot() or histplot()
         # sns.distplot(df[col].dropna(), kde=False, norm_hist=True, ax=ax[0])
         # sns.histplot(df[col].dropna(), kde=False, ax=ax[0])
         sns.displot(df[col].dropna())
-        ax[0].set_title('Distribution of kw_cap', fontsize=16)
-        ax[0].plot(r_range, norm_pdf, 'g', lw=2, label=f'N({mu:.2f}, {sigma**2:.4f})')
-        ax[0].legend(loc='upper left');
+        ax[0].set_title("Distribution of kw_cap", fontsize=16)
+        ax[0].plot(r_range, norm_pdf, "g", lw=2, label=f"N({mu:.2f}, {sigma**2:.4f})")
+        ax[0].legend(loc="upper left")
 
         # Q-Q plot
-        qq = sm.qqplot(df[col].dropna().values, line='s', ax=ax[1])
-        ax[1].set_title('Q-Q plot', fontsize = 16)
+        qq = sm.qqplot(df[col].dropna().values, line="s", ax=ax[1])
+        ax[1].set_title("Q-Q plot", fontsize=16)
         plt.show()
