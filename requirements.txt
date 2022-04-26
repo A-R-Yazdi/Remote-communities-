@@ -12,3 +12,6 @@ scikit-image>=0.18.1
 statsmodels>=0.13.2
 holidays>=0.13.0
 papermill>=2.3.4
+sktime>=0.11.0
+lightgbm>=2.2.3
+-e ./packages/Preprocess

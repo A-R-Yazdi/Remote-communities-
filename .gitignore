@@ -4,3 +4,5 @@ notebooks/mlruns
 artifacts/models
 notebooks/.ipynb_checkpoints
 data/*
+packages/Preprocess/Preps.egg-info
+models/lgbm_forecaster.pickle
