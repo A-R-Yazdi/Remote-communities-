@@ -22,8 +22,9 @@ This project comprises a set of commands to be run at a shell command prompt.  E
 
 - [Python 3.9](https://www.python.org/downloads/release/python-390/), see the full list of dependencies in [environment.yml](environment.yml)
 - [miniconda](https://docs.conda.io/en/latest/miniconda.html) (highly recommended)
+- If environment.yml has issues, use [requirements.txt](requirements.txt)
 
-## **Installation**
+## **Installation** 
 Those steps are for your workstation on Ubuntu 18.04 using miniconda.
 Set and activate your python environment with the following commands:  
 ```shell
@@ -44,7 +45,7 @@ git clone https://github.com/A-R-Yazdi/Remote-communities-.git
 cd Remote-communities-
 ```
 
-2. 
+2. Follow the [Installation](#Installation) steps
 
 3. Run the wanted notebooks.
 ```shell
