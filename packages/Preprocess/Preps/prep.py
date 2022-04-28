@@ -1,3 +1,4 @@
+from typing_extensions import Self
 import pandas as pd
 from typing import Union, List
 import matplotlib.pyplot as plt
@@ -7,7 +8,8 @@ import scipy.stats as scs
 import numpy as np
 import seaborn as sns
 import statsmodels.api as sm
-
+from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+from sklearn.metrics import mean_absolute_error, mean_absolute_percentage_error
 
 class Preprocessing:
     def __init__(self):
@@ -115,7 +117,8 @@ class Preprocessing:
         #   pass
         # else:
         #   print("params need to be the correct type")
-
+        
+        # create an empty dataframe with given columns
         d_outliers = pd.DataFrame(columns=df.columns)
 
         # if the row number is less than anomaly_window, take the first anomaly_window number of rows and calculate the mean, std
@@ -181,22 +184,47 @@ class Preprocessing:
 
         return df
 
-    def plot_dfs(self, dfs: List[pd.DataFrame]):
+    def plot_dfs(self, dfs: List[pd.DataFrame], cols: List[str]):
+        """
+        dfs, is the list of dataframes we want to plot, each element must be a dataframe;
+        cols, is the list of columns of the dataframes we want to plot, each element is a string.
+        """
         li = list(dfs)
 
         for i in range(len(li)):
-            data = li[i][["datetime", "kw_cap"]].set_index("datetime")
-            fig = data.plot(figsize=(20, 4), title="df" + str(i + 1) + " kw_cap")
-            # fig.savefig(fig_root+'df'+str(i)+'.png')
-            # print(fig)
+            for j in range(len(cols)):
+                # li[i] is a dataframe
+                data = li[i][["datetime", cols[j]]].set_index("datetime")
+                fig = data.plot(figsize=(20, 4), title="df" + str(i + 1) + " "+ cols[j])
+                # fig.savefig(fig_root+'df'+str(i)+'.png')
+                # print(fig)
+                # use a print() statement will print: 'AxesSubplot' object ......(something something)
+                plt.show()
 
-            temp_data = li[i][["datetime", "Temp (°C)"]].set_index("datetime")
-            fig = temp_data.plot(
-                figsize=(20, 4), title="df" + str(i + 1) + " temperature"
-            )
-            # use a print() statement will print: 'AxesSubplot' object ......(something something)
-            # print(fig)
-            plt.show()
+    def plot_series(self, time, series, format="-", start=0, end=None, label=None):
+        plt.plot(time[start:end], series[start:end], format, label=label)
+        plt.xlabel("Time")
+        plt.ylabel("Value")
+        if label:
+            plt.legend(fontsize=14)
+        plt.grid(True)
+
+    def plot_mvag_w_data(self, window_size: int, series: pd.Series):
+        """
+        windown_size is the number of data points we use to derive moving average.
+        series has to be a Pandas series.
+        """
+        moving_avg = self.moving_average_forecast(np.array(series), window_size)
+        mape = mean_absolute_percentage_error(moving_avg, series[-len(moving_avg) :])
+        mae = mean_absolute_error(moving_avg, series[-len(moving_avg) :])
+
+        plt.figure(figsize=(15, 3))
+        self.plot_series(range(len(series)), series, label="Series")
+        self.plot_series(
+            range(window_size, len(series)),
+            moving_avg,
+            label=f"Moving average ({window_size} hours), MAE {mae:.3f}, MAPE {mape:.3f}",
+        )
 
     def scale_series(
         self,
@@ -298,3 +326,39 @@ class Preprocessing:
         qq = sm.qqplot(df[col].dropna().values, line="s", ax=ax[1])
         ax[1].set_title("Q-Q plot", fontsize=16)
         plt.show()
+
+
+    # adapted from https://www.kaggle.com/kashnitsky/topic-9-part-1-time-series-analysis-in-python?scriptVersionId=50985180&cellId=80
+    def tsplot(self, y, lags=None, figsize=(12, 7)):
+        """
+        Plot time series, its ACF and PACF, calculate Dickey–Fuller test.
+        y - timeseries
+        lags - how many lags to include in ACF, PACF calculation
+        """
+        if not isinstance(y, pd.Series):
+            y = pd.Series(y)
+
+        fig = plt.figure(figsize=figsize)
+        layout = (2, 2)
+        ts_ax = plt.subplot2grid(layout, (0, 0), colspan=2)
+        acf_ax = plt.subplot2grid(layout, (1, 0))
+        pacf_ax = plt.subplot2grid(layout, (1, 1))
+
+        y.plot(ax=ts_ax)
+        p_value = sm.tsa.stattools.adfuller(y)[1]
+        ts_ax.set_title(
+            "Time Series Analysis Plots\n Dickey-Fuller: p={0:.5f}".format(p_value)
+        )
+        plot_acf(y, lags=lags, ax=acf_ax)
+        plot_pacf(y, lags=lags, ax=pacf_ax)
+        plt.tight_layout()
+
+    def moving_average_forecast(self, series, window_size):
+        """
+        Forecasts the mean of the past $window_size number of few values.
+        The series has to be a Numpy array, which is quite different from Pandas Series
+        If window_size=1, then this is equivalent to naive forecast.
+        """
+        mov = np.cumsum(series)
+        mov[window_size:] = mov[window_size:] - mov[:-window_size]
+        return mov[window_size - 1 : -1] / window_size
