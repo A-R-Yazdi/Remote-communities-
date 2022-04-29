@@ -9,3 +9,4 @@ artifacts/nbooks
 data/*
 **/**/*.egg-info
 models/*
+Notes_for_ryan.md

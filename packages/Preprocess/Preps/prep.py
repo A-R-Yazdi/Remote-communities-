@@ -195,7 +195,7 @@ class Preprocessing:
             for j in range(len(cols)):
                 # li[i] is a dataframe
                 data = li[i][["datetime", cols[j]]].set_index("datetime")
-                fig = data.plot(figsize=(20, 4), title="df" + str(i + 1) + " "+ cols[j])
+                fig = data.plot(figsize=(20, 4), title="dataframe " + str(i + 1) + " "+ cols[j])
                 # fig.savefig(fig_root+'df'+str(i)+'.png')
                 # print(fig)
                 # use a print() statement will print: 'AxesSubplot' object ......(something something)
