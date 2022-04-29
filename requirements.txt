@@ -15,4 +15,5 @@ papermill>=2.3.4
 sktime>=0.11.0
 lightgbm>=2.2.3
 papermill>=2.2.0
+tensorflow>=2.8.0
 -e ./packages/Preprocess
