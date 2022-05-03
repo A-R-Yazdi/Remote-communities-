@@ -10,3 +10,4 @@ data/*
 **/**/*.egg-info
 models/*
 results_n_comments/*
+notebooks/DNN_Ali_April13.ipynb
