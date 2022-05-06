@@ -9,5 +9,5 @@ artifacts/nbooks
 data/*
 **/**/*.egg-info
 models/*
-results_n_comments/*
+results_n_comments/resultsComparison
 notebooks/DNN_Ali_April13.ipynb
