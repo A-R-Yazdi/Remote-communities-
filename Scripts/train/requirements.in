@@ -1,0 +1,9 @@
+pandas
+numpy
+scikit-learn
+matplotlib
+sktime
+lightgbm
+argparse
+joblib
+-e ../packages/remoteCommunity
