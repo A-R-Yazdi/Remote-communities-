@@ -6,4 +6,6 @@ sktime
 lightgbm
 argparse
 joblib
+fastapi
+uvicorn
 -e ../packages/remoteCommunity
