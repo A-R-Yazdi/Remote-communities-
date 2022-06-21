@@ -1,16 +1,13 @@
 # # bash script takes one fh as input param 
 # curl -X POST localhost:8001/predict?fh=$1
 
-# can change -fh to optional param with a default
-python model_monitoring/score.py -fh 23 > model_monitoring/score.txt
+# echo $0 
+full_path=$(realpath $0)
+# echo $full_path
+dir_path=$(dirname $full_path)
+# echo $dir_path
+# echo $(dirname $(realpath $0))
 
-score=$(cat model_monitoring/score.txt)
-
-# if statement doesn't have the correct syntax, 
-if [$score -eq "{'17542':0.6735439099177059}"]; then 
-    echo "Retrain model..."
-    bash run.sh
-else
-    echo "Model does not need update"
-fi 
-
+# it's important that we used absolute path here with $dir_path, this means we can use relative path in the monitor.py file
+# and it won't matter where we run this script.
+python $dir_path/model_monitoring/monitor.py
