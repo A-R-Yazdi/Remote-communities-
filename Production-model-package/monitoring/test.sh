@@ -10,4 +10,4 @@ dir_path=$(dirname $full_path)
 
 # it's important that we used absolute path here with $dir_path, this means we can use relative path in the monitor.py file
 # and it won't matter where we run this script.
-python $dir_path/model_monitoring/monitor.py
+python $dir_path/monitor.py
