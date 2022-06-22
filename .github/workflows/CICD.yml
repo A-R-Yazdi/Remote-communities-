@@ -29,4 +29,8 @@ jobs:
         - name: Run monitor script
           run:
             sleep 30
+<<<<<<< HEAD
             bash Production-model-package/monitoring/test.sh
+=======
+            bash Production-model-package/monitoring/test.sh
+>>>>>>> master
