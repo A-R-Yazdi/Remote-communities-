@@ -1,10 +1,5 @@
 name: CICD
-on:
-  # Triggers the workflow on push or pull request events but only for SELECTED branch
-  push:
-    branches: [ "Forecasting_LingJun" ]
-#   pull_request:
-#     branches: [ "master" ]
+on: push
 jobs:
   build-deploy-monitor:
     runs-on: ubuntu-latest
