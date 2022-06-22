@@ -1,4 +1,3 @@
-from operator import sub
 import requests
 import argparse
 import subprocess
@@ -29,7 +28,7 @@ args.add_argument("-fh", "--forecast_horizon", default=20, help="forecast horizo
 args = vars(args.parse_args())
 
 fh = args["forecast_horizon"]
-scoring_uri = "http://localhost:8001/predict?fh="+str(fh)
+scoring_uri = "http://127.0.0.1:8001/predict?fh="+str(fh)
 resp = requests.post(scoring_uri)
 print(resp.text.strip('\"'))
 # print(str({"17539":0.7373629947076457}))
