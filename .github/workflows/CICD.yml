@@ -1,0 +1,19 @@
+name: CICD
+on:
+  # Triggers the workflow on push or pull request events but only for SELECTED branch
+  push:
+    branches: [ "Forecasting_LingJun" ]
+#   pull_request:
+#     branches: [ "master" ]
+jobs:
+  build-deploy-monitor:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      - name: Run deployment script
+        run:
+          bash Production-model-package/deploy/run.sh
+      - name: Run monitor script
+        run:
+          bash Production-model-package/monitoring/test.sh
