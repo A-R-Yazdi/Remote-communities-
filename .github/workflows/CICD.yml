@@ -27,6 +27,6 @@ jobs:
             python -m pip install --upgrade pip
             pip install -r Production-model-package/requirements/requirements.txt
         - name: Run monitor script
-          run:
-            sleep 30
+          run: |
+            sleep 30s
             bash Production-model-package/monitoring/test.sh
