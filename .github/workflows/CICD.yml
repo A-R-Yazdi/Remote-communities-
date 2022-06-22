@@ -1,10 +1,9 @@
 name: CICD
 on: push
 jobs:
-  build-deploy-monitor:
+  build-deploy:
     runs-on: ubuntu-latest
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v2
         with:
@@ -16,6 +15,18 @@ jobs:
       - name: Run deployment script
         run:
           bash Production-model-package/deploy/run.sh
-      - name: Run monitor script
-        run:
-          bash Production-model-package/monitoring/test.sh
+  monitor:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+        - uses: actions/setup-python@v2
+          with:
+            python-version: 3.8
+        - name: Install dependencies
+          run:
+            python -m pip install --upgrade pip
+            pip install -r Production-model-package/requirements/requirements.txt
+        - name: Run monitor script
+          run:
+            sleep 30
+            bash Production-model-package/monitoring/test.sh
