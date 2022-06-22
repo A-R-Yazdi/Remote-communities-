@@ -3,9 +3,11 @@
 # To update, run:
 #
 #    pip-compile
-#
--e ../packages/remoteCommunity
+
+# the install local package line is causing trouble for Github Actions, is there a better way to install it?
+# -e ../packages/remoteCommunity
     # via -r requirements.in
+
 anyio==3.6.1
     # via starlette
 argparse==1.4.0
