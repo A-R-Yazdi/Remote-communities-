@@ -1,0 +1,11 @@
+pandas
+numpy
+scikit-learn
+matplotlib
+sktime
+lightgbm
+argparse
+joblib
+fastapi
+uvicorn
+-e ../packages/remoteCommunity
